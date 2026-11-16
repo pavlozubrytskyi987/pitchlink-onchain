@@ -1,0 +1,19 @@
+[features]
+resolution = true
+skip-lint = false
+
+[programs.localnet]
+pitchlink = "EvJeVAfsJQ5tKR2RH4to2jgePPftg175H2re4Tw9V9AD"
+
+[programs.devnet]
+pitchlink = "EvJeVAfsJQ5tKR2RH4to2jgePPftg175H2re4Tw9V9AD"
+
+[registry]
+url = "https://api.apr.dev"
+
+[provider]
+cluster = "Localnet"
+wallet = "~/.config/solana/id.json"
+
+[scripts]
+test = "npx ts-mocha -p ./tsconfig.json -t 1000000 tests/**/*.ts"

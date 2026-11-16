@@ -1,11 +1,28 @@
-.env
-.env.*
-!.env.example
-node_modules/
+# Build artifacts
 target/
+!target/idl/
+!target/idl/pitchlink.json
+!target/types/
+!target/types/pitchlink.ts
+!target/deploy/
+!target/deploy/pitchlink-keypair.json
+node_modules/
+dist/
+
+# Anchor
 .anchor/
-test-ledger/
-*.log
+
+# Environment
+.env
+.env.local
+
+# IDE
+.vscode/
+.idea/
+
+# OS
 .DS_Store
-**/keypair.json
-**/*-keypair.json
+Thumbs.db
+
+# Test
+test-ledger/

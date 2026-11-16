@@ -1,0 +1,26 @@
+{
+  "name": "auction-engine",
+  "version": "0.1.0",
+  "description": "On-chain English auction engine — a Web2 backend pattern rebuilt as a Solana program",
+  "license": "MIT",
+  "scripts": {
+    "test": "anchor test",
+    "build": "anchor build",
+    "deploy": "anchor deploy --provider.cluster devnet",
+    "cli": "npx ts-node cli/src/index.ts"
+  },
+  "dependencies": {
+    "@coral-xyz/anchor": "^0.31.1",
+    "@solana/web3.js": "^1.95.0",
+    "commander": "^12.1.0"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.3.0",
+    "@types/mocha": "^10.0.0",
+    "chai": "^4.4.0",
+    "mocha": "^10.7.0",
+    "ts-mocha": "^10.0.0",
+    "ts-node": "^10.9.0",
+    "typescript": "^5.5.0"
+  }
+}

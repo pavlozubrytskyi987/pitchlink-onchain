@@ -1,8 +1,7 @@
 import * as anchor from "@coral-xyz/anchor";
 import { assert } from "chai";
 import { Keypair, LAMPORTS_PER_SOL, PublicKey, SystemProgram } from "@solana/web3.js";
-
-const { BN } = anchor;
+import BN from "bn.js";
 
 const AIRDROP_LAMPORTS = 10 * LAMPORTS_PER_SOL;
 const INITIAL_BID = new BN(1_000_000);
@@ -111,8 +110,14 @@ describe("pitchlink", () => {
   }
 
   async function waitUntilAfter(unixTimestamp: number): Promise<void> {
-    const delayMs = Math.max(0, (unixTimestamp + 1) * 1_000 - Date.now());
-    await new Promise((resolve) => setTimeout(resolve, delayMs));
+    // Wait against the validator's own clock, not wall time — the local
+    // validator slot clock can trail real time by several seconds.
+    while (true) {
+      const slot = await provider.connection.getSlot();
+      const chainTime = await provider.connection.getBlockTime(slot);
+      if (chainTime !== null && chainTime > unixTimestamp) return;
+      await new Promise((resolve) => setTimeout(resolve, 500));
+    }
   }
 
   it("initialize_auction sets creator, end_ts, highest_bid = 0, and settled = false", async () => {
