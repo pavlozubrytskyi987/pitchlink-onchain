@@ -14,3 +14,11 @@ pub struct Settled {
     pub winner: Pubkey,
     pub amount: u64,
 }
+
+#[event]
+pub struct ClickRecorded {
+    pub link_id: [u8; 16],
+    pub creator: Pubkey,
+    pub count: u64,
+    pub ts: i64,
+}

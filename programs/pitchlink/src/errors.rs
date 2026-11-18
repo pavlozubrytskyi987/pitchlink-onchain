@@ -31,4 +31,7 @@ pub enum PitchlinkError {
 
     #[msg("Arithmetic overflow")]
     Overflow,
+
+    #[msg("Link id must not be all zero bytes")]
+    InvalidLinkId,
 }

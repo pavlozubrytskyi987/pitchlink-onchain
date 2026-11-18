@@ -6,6 +6,7 @@ pub mod instructions;
 pub mod state;
 
 use instructions::*;
+use state::LINK_ID_LEN;
 
 declare_id!("EvJeVAfsJQ5tKR2RH4to2jgePPftg175H2re4Tw9V9AD");
 
@@ -32,5 +33,19 @@ pub mod pitchlink {
     /// Creator cancels — only allowed while there are no bids.
     pub fn cancel_auction(ctx: Context<CancelAuction>) -> Result<()> {
         instructions::cancel_auction::handler(ctx)
+    }
+
+    /// Creates the ClickCounter PDA for a tracked link (count = 0).
+    pub fn init_click_counter(
+        ctx: Context<InitClickCounter>,
+        link_id: [u8; LINK_ID_LEN],
+        creator: Pubkey,
+    ) -> Result<()> {
+        instructions::init_click_counter::handler(ctx, link_id, creator)
+    }
+
+    /// Records one click on a tracked link. Permissionless.
+    pub fn increment_click(ctx: Context<IncrementClick>, link_id: [u8; LINK_ID_LEN]) -> Result<()> {
+        instructions::increment_click::handler(ctx, link_id)
     }
 }

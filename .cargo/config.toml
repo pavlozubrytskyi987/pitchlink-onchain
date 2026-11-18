@@ -1,0 +1,5 @@
+# Solana platform-tools ships cargo/rustc 1.79, which cannot parse crates that
+# use edition2024. Resolve dependencies MSRV-aware so newer, 1.79-incompatible
+# versions are skipped instead of breaking `anchor build`.
+[resolver]
+incompatible-rust-versions = "fallback"

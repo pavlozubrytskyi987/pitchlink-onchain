@@ -3,6 +3,8 @@ name = "pitchlink"
 version = "0.1.0"
 description = "Pitchlink: pump.fun-style single-link ad auction for niche creators on Solana"
 edition = "2021"
+# Matches the rustc shipped in Solana platform-tools (cargo-build-sbf).
+rust-version = "1.79.0"
 
 [lib]
 crate-type = ["cdylib", "lib"]
