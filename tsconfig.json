@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "types": ["mocha", "chai"],
+    "types": ["mocha", "chai", "node"],
     "typeRoots": ["./node_modules/@types"],
     "lib": ["es2020"],
     "module": "commonjs",
@@ -12,5 +12,5 @@
     "forceConsistentCasingInFileNames": true,
     "outDir": "./dist"
   },
-  "include": ["tests/**/*.ts", "cli/**/*.ts"]
+  "include": ["tests/**/*.ts", "cli/**/*.ts", "scripts/**/*.ts"]
 }

@@ -16,6 +16,12 @@ dist/
 .env
 .env.local
 
+# Keypairs / secrets — never commit these
+*-keypair.json
+!target/deploy/pitchlink-keypair.json
+relayer*.json
+*.key
+
 # IDE
 .vscode/
 .idea/
