@@ -5,7 +5,6 @@ target/
 !target/types/
 !target/types/pitchlink.ts
 !target/deploy/
-!target/deploy/pitchlink-keypair.json
 node_modules/
 dist/
 
@@ -18,7 +17,7 @@ dist/
 
 # Keypairs / secrets — never commit these
 *-keypair.json
-!target/deploy/pitchlink-keypair.json
+target/deploy/pitchlink-keypair.json
 relayer*.json
 *.key
 

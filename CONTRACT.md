@@ -47,6 +47,11 @@ English auction, 4 instructions, atomic refund of previous bidder). We relabel
 its domain from generic auction to "ad slot on a creator". Keep its working
 escrow logic; change names and add nothing on-chain beyond what's below.
 
+The program is NO LONGER auction-only: it also carries an on-chain click
+counter (see "CLICK TRACKING" below). The two features are independent — the
+click counter touches no auction account and holds no funds. Anything not
+listed in this file still needs a human decision before it goes on-chain.
+
 Program name: pitchlink
 
 Accounts:
@@ -78,9 +83,45 @@ Emit an event on place_bid and on settle_auction so the frontend can react:
   event BidPlaced  { auction: Pubkey, bidder: Pubkey, amount: u64, ts: i64 }
   event Settled    { auction: Pubkey, winner: Pubkey, amount: u64 }
 
+## CLICK TRACKING (added after the auction shipped — part of the program now)
+A brand wins an auction, gets a tracked link, and every click on that link is
+recorded on-chain so a creator's real conversion is provable. Pure counter: no
+payment, no escrow, no auction state.
+
+Account:
+  ClickCounter PDA  seeds = [b"clicks", link_id]
+    link_id: [u8; 16]        // short UTF-8 link id, RIGHT-PADDED with zero bytes
+    count: u64               // total clicks recorded
+    creator: Pubkey          // who the link credits
+    bump: u8
+
+Instructions (names are FINAL — frontend depends on them):
+  5. init_click_counter(link_id: [u8; 16], creator: Pubkey)
+       creates the PDA with count = 0. Called once, when a tracked link is
+       minted. Accounts: click_counter, payer (signer), system_program.
+  6. increment_click(link_id: [u8; 16])
+       count += 1. This is what the /go redirect calls on each click.
+       PERMISSIONLESS — any signer is accepted; a funded relayer wallet signs
+       and pays the fee. Accounts: click_counter, clicker (signer). No
+       system_program.
+
+Event:
+  event ClickRecorded { link_id: [u8; 16], creator: Pubkey, count: u64, ts: i64 }
+
+Frontend notes:
+- Anchor camelCases in TS: initClickCounter / incrementClick / clickRecorded,
+  and the account fields read as linkId / count / creator / bump.
+- Pad the link id the same way on every call, or the PDA will not match:
+    const b = Buffer.alloc(16); Buffer.from(text, "utf8").copy(b);
+  link_id must be 1..16 UTF-8 bytes; an all-zero link_id is rejected
+  (error InvalidLinkId).
+- Relayer: scripts/relayer-click.ts in onchain/ drives init / click / read on
+  devnet. Its keypair lives OUTSIDE the repo, at the path in RELAYER_KEYPAIR.
+
 ## THE IDL IS THE HANDOFF
 When onchain/ compiles, it produces target/idl/pitchlink.json. That file is
-the contract between repos. The frontend imports it to call the program. The
+the contract between repos, and it now carries the auction AND the click
+instructions, accounts and events. The frontend imports it to call the program. The
 human copies pitchlink.json from onchain/ into web/src/idl/ when it's ready.
 Until then, the frontend works against a MOCK with these same names.
 
